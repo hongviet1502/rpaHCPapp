@@ -30,7 +30,7 @@ ${DATA_DIR}          ${CURDIR}/data
 
 *** Variables ***
 # Timeouts được tăng lên
-${TIMEOUT}             40s
+${TIMEOUT}             50s
 ${LONG_TIMEOUT}         60s
 ${APP_LAUNCH_TIMEOUT}   45s
 

@@ -33,6 +33,7 @@ def run_tests(platform="android", device_name="R3CM605NEME", appium_server="http
         "--include", "smoke",
         "--include", "navigation",
         "--include", "basic",
+        "--include", "device_control",
     ]
     
     # Chạy mobile tests

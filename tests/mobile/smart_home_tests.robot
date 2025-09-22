@@ -48,28 +48,32 @@ TC003_Find Downlight Basic
     Find Device With Custom Scroll    ${device_xpath}
     Click Element    ${device_xpath}
     
-# TC004_Control Single Device Switch
-#     [Documentation]    Điều khiển công tắc đơn lẻ
-#     [Tags]    device_control    switch
+TC004_Control Button All
+    [Documentation]    Điều khiển tắt bật tất cả
+    [Tags]    device_control    switch
+    ${switch_xpath}=    Set Variable    //android.widget.ScrollView/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup[4]/android.view.ViewGroup[1]
     
-#     Launch Smart Home App
-#     Login To Smart Home App
-#     Navigate To Device List
+    Check Specific Switch
+    # Bật switch
+    Set Switch Status    ${switch_xpath}    on
+    Verify Switch Status    ${switch_xpath}    on
     
-#     # Test với thiết bị đầu tiên
-    # ${first_device}=    Set Variable    ${DEVICE_LIST[0]['device_name']}
-    # Select Device    ${first_device}
+    Sleep    2s
     
-#     # Test bật công tắc 1
-#     Control Device Switch    1    on
-#     Verify Device Status    1    on
-#     Take Device Screenshot    ${first_device}    switch1_on
-    
-#     # Test tắt công tắc 1
-#     Control Device Switch    1    off
-#     Verify Device Status    1    off
-#     Take Device Screenshot    ${first_device}    switch1_off
+    # Tắt switch  
+    Set Switch Status    ${switch_xpath}    off
+    Verify Switch Status    ${switch_xpath}    off
 
+TC0006_Control Dim Slider Three Positions
+    [Documentation]    Điều khiển dim
+    [Tags]    device_control    dim
+    Control Dim Slider    0    # Click đầu slider (0%)
+    Control Dim Slider    50   # Click giữa slider (50%)
+    Control Dim Slider    100  # Click cuối slider (100%)
+# TC006_Control Dim
+#     [Documentation]    Điều khiển dim
+#     [Tags]    device_control    dim
+#     Test Brightness Levels
 # TC005_Control All Switches
 #     [Documentation]    Điều khiển tất cả công tắc
 #     [Tags]    device_control    all_switches
