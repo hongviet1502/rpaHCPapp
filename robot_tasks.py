@@ -37,7 +37,7 @@ def run_tests(platform="android", device_name="R3CM605NEME", appium_server="http
     ]
     
     # Chạy mobile tests
-    robot_args.append("tests/mobile/switch_tests.robot")
+    robot_args.append("tests/mobile/Curtain_tests.robot")
     
     print(f"Chạy tests: {' '.join(robot_args)}")
     

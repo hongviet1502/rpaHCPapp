@@ -14,6 +14,7 @@ Resource         ${CURDIR}/keywords/common_keywords.robot
 Resource         ${CURDIR}/keywords/mobile_keywords.robot
 Resource         ${CURDIR}/keywords/smart_home_keywords.robot
 Resource         ${CURDIR}/keywords/switch_keywords.robot
+Resource         ${CURDIR}/keywords/curtain_keywords.robot
 
 *** Variables ***
 # Appium settings
