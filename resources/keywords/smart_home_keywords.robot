@@ -193,9 +193,7 @@ Verify Switch Status
 
 Check Specific Switch
     [Documentation]    Kiểm tra switch cụ thể của bạn
-    
-    ${switch_xpath}=    Set Variable    //android.widget.ScrollView/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup[4]/android.view.ViewGroup[1]
-    ${status}=    Check Switch Status    ${switch_xpath}
+    ${status}=    Check Switch Status    ${UI_Downlight_Button_All}
     
     Log    Your switch is currently: ${status}
     [Return]    ${status}
@@ -320,81 +318,11 @@ Control Dim Slider
     [Documentation]    Điều khiển dim slider với 3 mức: đầu, giữa, cuối
     [Arguments]    ${level}
     # level: 0, 50, 100 hoặc start, middle, end
-    
-    ${dim_slider_xpath}=    Set Variable    //android.widget.ScrollView/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup[5]
-    
     Run Keyword If    '${level}' == '0' or '${level}' == 'start'
-    ...    Click Slider Position    ${dim_slider_xpath}    start
+    ...    Click Slider Position    ${UI_Downlight_Dim_Slider}    start
     ...    ELSE IF    '${level}' == '50' or '${level}' == 'middle'  
-    ...    Click Slider Position    ${dim_slider_xpath}    middle
+    ...    Click Slider Position    ${UI_Downlight_Dim_Slider}    middle
     ...    ELSE IF    '${level}' == '100' or '${level}' == 'end'
-    ...    Click Slider Position    ${dim_slider_xpath}    end
+    ...    Click Slider Position    ${UI_Downlight_Dim_Slider}    end
     ...    ELSE
     ...    Fail    Invalid level: ${level}. Use: 0/start, 50/middle, 100/end
-
-Test Dim Three Levels
-    [Documentation]    Test dim slider ở 3 mức
-    
-    Log    Testing DIM at START position (0%)
-    Control Dim Slider    start
-    Sleep    3s
-    
-    Log    Testing DIM at MIDDLE position (50%)
-    Control Dim Slider    middle
-    Sleep    3s
-    
-    Log    Testing DIM at END position (100%)
-    Control Dim Slider    end
-    Sleep    3s
-
-Click Custom Position On Slider
-    [Documentation]    Click vào vị trí tùy chỉnh trên slider (%)
-    [Arguments]    ${slider_xpath}    ${percentage}
-    
-    ${location}    ${size}=    Get Slider Coordinates    ${slider_xpath}
-    
-    ${x}=    Evaluate    ${location}[x] + int(${size}[width] * ${percentage} / 100)
-    ${y}=    Evaluate    ${location}[y] + ${size}[height] // 2
-    
-    Log    Clicking slider at ${percentage}% - coordinates (${x}, ${y})
-    @{coords}=    Create List    ${x}    ${y}
-    Tap    ${coords}
-    Sleep    2s
-
-Swipe Slider Simple
-    [Documentation]    Swipe slider từ vị trí này sang vị trí khác
-    [Arguments]    ${slider_xpath}    ${from_percent}    ${to_percent}
-    
-    ${location}    ${size}=    Get Slider Coordinates    ${slider_xpath}
-    
-    ${from_x}=    Evaluate    ${location}[x] + int(${size}[width] * ${from_percent} / 100)
-    ${to_x}=      Evaluate    ${location}[x] + int(${size}[width] * ${to_percent} / 100)
-    ${y}=         Evaluate    ${location}[y] + ${size}[height] // 2
-    
-    Log    Swiping slider from ${from_percent}% to ${to_percent}%
-    Log    Coordinates: (${from_x}, ${y}) -> (${to_x}, ${y})
-    
-    Swipe    start_x=${from_x}    start_y=${y}    end_x=${to_x}    end_y=${y}
-    Sleep    2s
-
-Debug Slider Info
-    [Documentation]    In thông tin chi tiết slider để debug
-    [Arguments]    ${slider_xpath}
-    
-    Log    ===== SLIDER DEBUG INFO =====
-    
-    ${location}    ${size}=    Get Slider Coordinates    ${slider_xpath}
-    
-    # Tính các điểm quan trọng
-    ${start_x}=    Evaluate    ${location}[x] + 10
-    ${middle_x}=   Evaluate    ${location}[x] + ${size}[width] // 2
-    ${end_x}=      Evaluate    ${location}[x] + ${size}[width] - 10
-    ${y}=          Evaluate    ${location}[y] + ${size}[height] // 2
-    
-    Log    Slider XPath: ${slider_xpath}
-    Log    Location: x=${location}[x], y=${location}[y]  
-    Log    Size: width=${size}[width], height=${size}[height]
-    Log    Start Point (0%): (${start_x}, ${y})
-    Log    Middle Point (50%): (${middle_x}, ${y})
-    Log    End Point (100%): (${end_x}, ${y})
-    Log    ===============================
