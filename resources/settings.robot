@@ -23,7 +23,7 @@ ${PLATFORM_NAME}    Android
 ${DEVICE_NAME}      R3CM605NEME
 ${APP_PACKAGE}      vn.com.rangdong.rallismartv3dev
 ${APP_ACTIVITY}     vn.com.rangdong.rallismartv3dev.MainActivity
-${AUTOMATION_NAME}  uiautomator2
+${AUTOMATION_NAME}  Uiautomator2
 
 # File paths
 ${SCREENSHOT_DIR}    ${CURDIR}/../results/screenshots

@@ -56,3 +56,10 @@ TC005_Control Button Curtain
     [Documentation]    Điều khiển các nút của curtain
     [Tags]    device_control    curtain
     Test Control
+
+TC006_Back To Home Screen
+    [Documentation]    Điều khiển dim
+    [Tags]    navigation    home
+    # Click Button Go Back
+    Close Application
+

@@ -183,3 +183,24 @@ Advanced All Switch Test
     Verify All Switch Button Text
     
     Log    Advanced test completed
+
+Test Control Single Button
+    [Documentation]    Test từng nút của công tắc
+    Wait Until Page Contains Element    ${UI_Button_1}    20
+    Click Element    ${UI_Button_1}
+    Sleep    5s
+    Wait Until Page Contains Element    ${UI_Button_2}    20
+    Click Element    ${UI_Button_2}
+    Sleep    5s
+    Wait Until Page Contains Element    ${UI_Button_3}    20
+    Click Element    ${UI_Button_3}
+    Sleep    5s
+    Wait Until Page Contains Element    ${UI_Button_4}    20
+    Click Element    ${UI_Button_4}
+    Sleep    5s
+
+Click Button Go Back
+    [Documentation]    Nhấn go back nếu test mọi thứ oke
+    Wait Until Page Contains Element    ${UI_Button_Back}    20
+    Click Element    ${UI_Button_Back}
+    Sleep    5s

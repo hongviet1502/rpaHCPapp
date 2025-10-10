@@ -52,4 +52,15 @@ TC004_Control Button All
     [Tags]    device_control    switch
     Click All Switch Button  # Click bất kể trạng thái hiện tại
     Click All Switch Button  # Click lần nữa để toggle
+
+TC005_Test Single Switch
+    [Documentation]    Điều khiển từng nút
+    [Tags]    device_control    switch
+    Test Control Single Button
+TC006_Back To Home Screen
+    [Documentation]    Điều khiển dim
+    [Tags]    navigation    home
+    # Click Button Go Back
+    Close Application
+
     

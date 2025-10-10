@@ -70,5 +70,6 @@ TC0006_Control Dim Slider Three Positions
 TC006_Back To Home Screen
     [Documentation]    Điều khiển dim
     [Tags]    navigation    home
-    Go Back
-    Sleep    1s
+    Close Application
+    # Go Back
+    # Sleep    1s

@@ -23,3 +23,9 @@ Test Control
     Wait Until Page Contains Element    ${UI_Button_Pause}    20
     Click Element    ${UI_Button_Pause}
     Sleep    5s
+
+Click Button Go Back
+    [Documentation]    Nhấn go back nếu test mọi thứ oke
+    Wait Until Page Contains Element    ${UI_Button_Back_Curtain}    20
+    Click Element    ${UI_Button_Back_Curtain}
+    Sleep    5s
