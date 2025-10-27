@@ -19,7 +19,7 @@ INVALID_USER = {
 # Mobile configurations
 MOBILE_CONFIG = {
     "platform": "Android",
-    "device_name": "R3CM605NEME",
+    "device_name": "emulator-5554",
     "app_package": "com.rd.smart",
     "app_activity": "com.thingclips.smart.hometab.activity.FamilyHomeActivity",
     "automation_name": "UiAutomator2",
@@ -123,5 +123,5 @@ DEVICE_TYPE_MAP = {
 TEST_CONFIG = {
     "iterations": 1,
     "password": "Digital@2804",
-    "phone_id": "R3CM605NEME"
+    "phone_id": "R3Cemulator-5554M605NEME"
 }

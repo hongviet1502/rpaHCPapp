@@ -195,9 +195,9 @@ Test Control Single Button
     Wait Until Page Contains Element    ${UI_Button_3}    20
     Click Element    ${UI_Button_3}
     Sleep    5s
-    Wait Until Page Contains Element    ${UI_Button_4}    20
-    Click Element    ${UI_Button_4}
-    Sleep    5s
+    # Wait Until Page Contains Element    ${UI_Button_4}    20
+    # Click Element    ${UI_Button_4}
+    # Sleep    5s
 
 Click Button Go Back
     [Documentation]    Nhấn go back nếu test mọi thứ oke

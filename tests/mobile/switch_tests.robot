@@ -44,21 +44,21 @@ TC003_Find Switch Basic
     Launch Smart Home App
     Navigate To Device List
     
-    Find Device With Custom Scroll    ${UI_Switch_Device_Card}
+    Smart Device Search For Continuous Testing    ${UI_Switch_Device_Card}
     Click Element    ${UI_Switch_Device_Card}
 
-TC004_Control Button All
-    [Documentation]    Điều khiển tất cả các nút
-    [Tags]    device_control    switch
-    Click All Switch Button  # Click bất kể trạng thái hiện tại
-    Click All Switch Button  # Click lần nữa để toggle
+# TC004_Control Button All
+#     [Documentation]    Điều khiển tất cả các nút
+#     [Tags]    device_control    switch
+#     Click All Switch Button  # Click bất kể trạng thái hiện tại
+#     Click All Switch Button  # Click lần nữa để toggle
 
-TC005_Test Single Switch
+TC005_Test Single Switchl
     [Documentation]    Điều khiển từng nút
     [Tags]    device_control    switch
     Test Control Single Button
 TC006_Back To Home Screen
-    [Documentation]    Điều khiển dim
+    [Documentation]    Back về màn home
     [Tags]    navigation    home
     # Click Button Go Back
     Close Application

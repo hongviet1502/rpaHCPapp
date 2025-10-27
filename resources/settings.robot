@@ -20,7 +20,7 @@ Resource         ${CURDIR}/keywords/curtain_keywords.robot
 # Appium settings
 ${APPIUM_SERVER}    http://localhost:4723/wd/hub
 ${PLATFORM_NAME}    Android
-${DEVICE_NAME}      R3CM605NEME
+${DEVICE_NAME}      emulator-5554
 ${APP_PACKAGE}      vn.com.rangdong.rallismartv3dev
 ${APP_ACTIVITY}     vn.com.rangdong.rallismartv3dev.MainActivity
 ${AUTOMATION_NAME}  Uiautomator2

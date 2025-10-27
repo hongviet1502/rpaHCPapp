@@ -44,7 +44,7 @@ TC003_Find Curtain Basic
     Launch Smart Home App
     Navigate To Device List
     
-    Find Device With Custom Scroll    ${UI_Curtain_Device_Card}
+    Smart Device Search For Continuous Testing    ${UI_Curtain_Device_Card}
     Click Element    ${UI_Curtain_Device_Card}
 
 TC004_Enter Curtain Password

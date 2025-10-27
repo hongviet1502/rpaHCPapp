@@ -1,6 +1,6 @@
 *** Variables ***
 ${UI_HomePage_txt_Tatcathietbi}    //android.widget.TextView[@text="Tất cả thiết bị"]
 ${UI_HomePage_RecyclerView}    //androidx.recyclerview.widget.RecyclerView
-${UI_Downlight_Device_Card}    //android.view.ViewGroup[@content-desc="Downlight SMT_c871b738c1a4"]/android.view.ViewGroup[1]
-${UI_Switch_Device_Card}    //android.view.ViewGroup[@content-desc="Công tắc ble_wifi 3 nút_520a3138c1a4, Online"]
-${UI_Curtain_Device_Card}    //android.view.ViewGroup[@content-desc="Công tắc cửa cuốn_7d92bf020212, Online"]
+${UI_Downlight_Device_Card}    //android.view.ViewGroup[@content-desc="den viet test RPA"]/android.view.ViewGroup[1]
+${UI_Switch_Device_Card}    //android.view.ViewGroup[@content-desc="Công tắc RPA, Online"]
+${UI_Curtain_Device_Card}    //android.view.ViewGroup[@content-desc="Công tắc cửa cuốn_ce2a89020212, Online"]

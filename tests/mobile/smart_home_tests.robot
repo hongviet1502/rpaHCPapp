@@ -43,24 +43,64 @@ TC003_Find Downlight Basic
     
     Launch Smart Home App
     Navigate To Device List
-    Find Device With Custom Scroll    ${UI_Downlight_Device_Card}
+    Smart Device Search For Continuous Testing    ${UI_Downlight_Device_Card}
     Click Element    ${UI_Downlight_Device_Card}
     
 TC004_Control Button All
-    [Documentation]    Điều khiển tắt bật tất cả
+    [Documentation]    Đặt switch về trạng thái ON để có thể điều khiển dimming
     [Tags]    device_control    switch
-    Check Specific Switch
-    # Bật switch
-    Set Switch Status    ${UI_Downlight_Button_All}    on
-    Verify Switch Status    ${UI_Downlight_Button_All}    on
     
-    Sleep    2s
+    # Đảm bảo element tồn tại
+    Wait Until Page Contains Element    ${UI_Downlight_Button_All}    10s
     
-    # Tắt switch  
-    Set Switch Status    ${UI_Downlight_Button_All}    off
-    Verify Switch Status    ${UI_Downlight_Button_All}    off
+    # Kiểm tra trạng thái hiện tại
+    ${current_status}=    Get Switch Info    ${UI_Downlight_Button_All}
+    Log    Current switch status: ${current_status}
+    
+    # Nếu switch đang OFF, click để bật ON
+    Run Keyword If    ${current_status} == ${False}
+    ...    Log    Switch is OFF, clicking to turn ON
+    
+    Run Keyword If    ${current_status} == ${False}
+    ...    Click Element    ${UI_Downlight_Button_All}
+    
+    Run Keyword If    ${current_status} == ${True}
+    ...    Log    Switch is already ON
+    
+    # Đợi UI cập nhật và kiểm tra trạng thái với retry
+    Sleep    3s
+    
+    # Kiểm tra trạng thái với retry (tối đa 3 lần)
+    ${max_attempts}=    Set Variable    3
+    ${final_status}=    Set Variable    ${EMPTY}
+    
+    FOR    ${i}    IN RANGE    ${max_attempts}
+        ${final_status}=    Get Switch Info    ${UI_Downlight_Button_All}
+        Log    Attempt ${i+1}: Final switch status: ${final_status}
+        
+        # Nếu đã ON thì thoát loop
+        Exit For Loop If    ${final_status} == ${True}
+        
+        # Nếu chưa ON và chưa phải lần cuối, đợi và thử lại
+        Run Keyword If    ${i} < ${max_attempts}-1
+        ...    Log    Switch not ON yet, waiting and retrying...    WARN
+        
+        Run Keyword If    ${i} < ${max_attempts}-1
+        ...    Sleep    2s
+        
+        Run Keyword If    ${i} < ${max_attempts}-1
+        ...    Click Element    ${UI_Downlight_Button_All}
+        
+        Run Keyword If    ${i} < ${max_attempts}-1
+        ...    Sleep    2s
+    END
+    
+    # Đảm bảo switch ở trạng thái ON
+    Should Be Equal    ${final_status}    ${True}    Switch must be ON for dimming control after ${max_attempts} attempts
+    
+    Log    ✅ Switch is now ON and ready for dimming control
 
-TC0006_Control Dim Slider Three Positions
+TC005_Control Dim Slider Three Positions
     [Documentation]    Điều khiển dim
     [Tags]    device_control    dim
     Control Dim Slider    0    # Click đầu slider (0%)

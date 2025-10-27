@@ -9,7 +9,7 @@ import sys
 import subprocess
 from pathlib import Path
 
-def run_tests(platform="android", device_name="R3CM605NEME", appium_server="http://localhost:4723/wd/hub"):
+def run_tests(platform="android", device_name="emulator-5554", appium_server="http://localhost:4723/wd/hub"):
     """
     Chạy mobile tests với các tùy chọn khác nhau
     
@@ -37,7 +37,7 @@ def run_tests(platform="android", device_name="R3CM605NEME", appium_server="http
     ]
     
     # Chạy mobile tests
-    robot_args.append("tests/mobile/Curtain_tests.robot")
+    robot_args.append("tests/mobile")
     
     print(f"Chạy tests: {' '.join(robot_args)}")
     
@@ -55,7 +55,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Robot Framework Mobile Test Runner")
     parser.add_argument("--platform", choices=["android", "ios"], 
                        default="android", help="Platform mobile")
-    parser.add_argument("--device", default="R3CM605NEME", 
+    parser.add_argument("--device", default="emulator-5554", 
                        help="Tên device")
     parser.add_argument("--appium-server", default="http://localhost:4723/wd/hub", 
                        help="Địa chỉ Appium server")

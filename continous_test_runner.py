@@ -11,7 +11,7 @@ import glob
 from datetime import datetime
 from pathlib import Path
 
-def run_all_tests_continuous(platform="android", device_name="R3CM605NEME", appium_server="http://localhost:4723/wd/hub"):
+def run_all_tests_continuous(platform="android", device_name="emulator-5554", appium_server="http://localhost:4723/wd/hub"):
     """Chạy tất cả test files liên tục"""
     
     # Tìm tất cả file .robot
@@ -43,18 +43,23 @@ def run_all_tests_continuous(platform="android", device_name="R3CM605NEME", appi
                 os.makedirs(results_dir, exist_ok=True)
                 
                 print(f"\n🔄 Chạy: {file_name}")
+                print(f"📁 Results: {results_dir}")
                 
-                # Command robot
+                # Command robot với cải tiến cho continuous testing
                 cmd = [
                     "robot",
                     "--outputdir", str(results_dir),
                     "--variable", f"PLATFORM_NAME:{platform}",
                     "--variable", f"DEVICE_NAME:{device_name}",
                     "--variable", f"APPIUM_SERVER:{appium_server}",
+                    "--variable", "CONTINUOUS_TESTING:True",  # Thêm biến để biết đang chạy continuous
                     "--include", "smoke",
-                    "--include", "navigation",
+                    "--include", "navigation", 
                     "--include", "basic",
                     "--include", "device_control",
+                    "--log", f"{file_name}_log.html",
+                    "--report", f"{file_name}_report.html",
+                    "--output", f"{file_name}_output.xml",
                     test_file
                 ]
                 
@@ -74,7 +79,8 @@ def run_all_tests_continuous(platform="android", device_name="R3CM605NEME", appi
                 except Exception as e:
                     print(f"💥 {file_name} - ERROR: {str(e)}")
                 
-                # Đợi 5 giây giữa các file
+                # Đợi 5 giây giữa các file để UI ổn định
+                print("⏳ Đợi 5 giây để UI ổn định...")
                 time.sleep(5)
             
             print(f"\n✨ Hoàn thành Cycle {cycle}")

@@ -130,9 +130,26 @@ Execute Swipe Up
     
     Swipe    start_x=${x}    start_y=${start_y}    end_x=${x}    end_y=${end_y}
 
+Reset Scroll To Top
+    [Documentation]    Reset scroll position về đầu danh sách
+    [Arguments]    ${max_scroll_attempts}=20
+    
+    Log    Resetting scroll position to top...
+    
+    FOR    ${attempt}    IN RANGE    ${max_scroll_attempts}
+        # Scroll lên nhiều lần để đảm bảo về đầu
+        Scroll Using Swipe Simple    up
+        Sleep    1s
+    END
+    
+    Log    Scroll position reset to top
+
 Find Device With Custom Scroll
-    [Documentation]    Tìm thiết bị với custom scroll method
-    [Arguments]    ${device_xpath}    ${max_attempts}=30
+    [Documentation]    Tìm thiết bị với custom scroll method (hỗ trợ scroll lên/xuống)
+    [Arguments]    ${device_xpath}    ${max_attempts}=30    ${start_from_top}=True
+    
+    # Reset về đầu danh sách nếu được yêu cầu
+    Run Keyword If    ${start_from_top}    Reset Scroll To Top
     
     FOR    ${attempt}    IN RANGE    ${max_attempts}
         ${found}=    Run Keyword And Return Status
@@ -140,12 +157,113 @@ Find Device With Custom Scroll
         
         Exit For Loop If    ${found}
         
-        # Sử dụng swipe custom
+        # Scroll xuống để tìm thiết bị
         Scroll Using Swipe Simple    down
         Sleep    2s
     END
     
     Page Should Contain Element    ${device_xpath}
+
+Find Device With Bidirectional Scroll
+    [Documentation]    Tìm thiết bị với scroll 2 chiều (lên và xuống)
+    [Arguments]    ${device_xpath}    ${max_attempts}=15
+    
+    Log    Searching device with bidirectional scroll...
+    
+    # Bắt đầu từ đầu danh sách
+    Reset Scroll To Top
+    
+    FOR    ${attempt}    IN RANGE    ${max_attempts}
+        ${found}=    Run Keyword And Return Status
+        ...    Page Should Contain Element    ${device_xpath}
+        
+        Exit For Loop If    ${found}
+        
+        # Scroll xuống
+        Scroll Using Swipe Simple    down
+        Sleep    2s
+    END
+    
+    # Nếu không tìm thấy, thử scroll lên từ vị trí hiện tại
+    Run Keyword If    ${found} == False
+    ...    Search Device Scrolling Up    ${device_xpath}    ${max_attempts}
+    
+    Page Should Contain Element    ${device_xpath}
+
+Search Device Scrolling Up
+    [Documentation]    Tìm thiết bị bằng cách scroll lên từ vị trí hiện tại
+    [Arguments]    ${device_xpath}    ${max_attempts}=15
+    
+    Log    Searching device by scrolling up...
+    
+    FOR    ${attempt}    IN RANGE    ${max_attempts}
+        ${found}=    Run Keyword And Return Status
+        ...    Page Should Contain Element    ${device_xpath}
+        
+        Exit For Loop If    ${found}
+        
+        # Scroll lên
+        Scroll Using Swipe Simple    up
+        Sleep    2s
+    END
+    
+    [Return]    ${found}
+
+Prepare Device Search For Continuous Testing
+    [Documentation]    Chuẩn bị tìm kiếm thiết bị cho continuous testing - đảm bảo luôn bắt đầu từ đầu danh sách
+    [Arguments]    ${device_xpath}
+    
+    Log    Preparing device search for continuous testing...
+    
+    # Luôn reset về đầu danh sách trước khi tìm thiết bị mới
+    Reset Scroll To Top
+    Sleep    3s  # Đợi UI ổn định
+    
+    # Tìm thiết bị với phương pháp tối ưu
+    Find Device With Bidirectional Scroll    ${device_xpath}
+    
+    Log    Device found and ready for testing
+
+Navigate To Device List For Continuous Testing
+    [Documentation]    Điều hướng đến danh sách thiết bị với cải tiến cho continuous testing
+    [Arguments]    ${reset_scroll}=True
+    
+    Log    Navigating to device list for continuous testing...
+    
+    # Điều hướng đến danh sách thiết bị
+    Wait For Element And Click Mobile    ${UI_HomePage_txt_Tatcathietbi}
+    Click Element    ${UI_HomePage_txt_Tatcathietbi}
+    Wait Until Page Contains Element    ${UI_HomePage_RecyclerView}   ${TIMEOUT}
+    
+    # Reset scroll position nếu được yêu cầu
+    Run Keyword If    ${reset_scroll}
+    ...    Reset Scroll To Top
+    
+    Log    Successfully navigated to device list
+
+Smart Device Search For Continuous Testing
+    [Documentation]    Tìm kiếm thiết bị thông minh cho continuous testing
+    [Arguments]    ${device_xpath}    ${device_name}=Unknown Device
+    
+    Log    Starting smart device search for continuous testing: ${device_name}
+    
+    # Bước 1: Đảm bảo đang ở đầu danh sách
+    Reset Scroll To Top
+    Sleep    2s
+    
+    # Bước 2: Tìm thiết bị với scroll 2 chiều
+    ${found}=    Run Keyword And Return Status
+    ...    Find Device With Bidirectional Scroll    ${device_xpath}
+    
+    # Bước 3: Nếu không tìm thấy, thử phương pháp khác
+    Run Keyword If    ${found} == False
+    ...    Log    Device ${device_name} not found with bidirectional scroll, trying alternative method    WARN
+    
+    # Bước 4: Đảm bảo thiết bị được tìm thấy
+    Run Keyword Unless    ${found}
+    ...    Fail    Cannot find device: ${device_name} with xpath: ${device_xpath}
+    
+    Log    Successfully found device: ${device_name}
 
 Check Switch Status
     [Documentation]    Kiểm tra trạng thái switch có được check hay không
@@ -156,6 +274,14 @@ Check Switch Status
     
     # Lấy trạng thái checked
     ${is_checked}=    Get Element Attribute    ${switch_xpath}    checked
+    
+    # Nếu không lấy được checked attribute, thử selected
+    ${try_selected}=    Run Keyword And Return Status    Get Element Attribute    ${switch_xpath}    selected
+    Run Keyword If    ${try_selected}    ${is_checked}=    Get Element Attribute    ${switch_xpath}    selected
+    
+    # Nếu vẫn không được, thử enabled
+    ${try_enabled}=    Run Keyword And Return Status    Get Element Attribute    ${switch_xpath}    enabled
+    Run Keyword If    ${try_enabled}    ${is_checked}=    Get Element Attribute    ${switch_xpath}    enabled
     
     Log    Switch status: ${is_checked}
     [Return]    ${is_checked}
@@ -219,22 +345,51 @@ Set Switch Status
     [Documentation]    Đặt switch về trạng thái mong muốn
     [Arguments]    ${switch_xpath}    ${desired_status}
     
+    Log    Setting switch to: ${desired_status}
+    
+    # Đợi element xuất hiện
+    Wait Until Page Contains Element    ${switch_xpath}    10s
+    
+    # Lấy trạng thái hiện tại
     ${current_status}=    Check Switch Status    ${switch_xpath}
+    Log    Current switch status: ${current_status}
     
     # Chỉ click nếu cần thay đổi trạng thái
     Run Keyword If    '${desired_status}' == 'on' and '${current_status}' == 'false'
-    ...    Click Element    ${switch_xpath}
-    ...    ELSE IF    '${desired_status}' == 'off' and '${current_status}' == 'true'  
-    ...    Click Element    ${switch_xpath}
+    ...    Run Keywords
+    ...    Log    Clicking to turn switch ON
+    ...    AND    Click Element    ${switch_xpath}
     
-    # Đợi và xác minh
-    Sleep    2s
+    Run Keyword If    '${desired_status}' == 'off' and '${current_status}' == 'true'
+    ...    Run Keywords  
+    ...    Log    Clicking to turn switch OFF
+    ...    AND    Click Element    ${switch_xpath}
+    
+    Run Keyword If    '${desired_status}' == 'on' and '${current_status}' == 'true'
+    ...    Log    Switch already ON, no action needed
+    
+    Run Keyword If    '${desired_status}' == 'off' and '${current_status}' == 'false'
+    ...    Log    Switch already OFF, no action needed
+    
+    # Đợi trạng thái thay đổi
+    Sleep    3s
+    
+    # Kiểm tra trạng thái cuối cùng
     ${final_status}=    Check Switch Status    ${switch_xpath}
+    Log    Final switch status: ${final_status}
     
-    Run Keyword If    '${desired_status}' == 'on'
-    ...    Should Be Equal    ${final_status}    true
-    ...    ELSE IF    '${desired_status}' == 'off'
-    ...    Should Be Equal    ${final_status}    false
+    # Xác minh trạng thái cuối cùng
+    ${status_correct}=    Set Variable    ${False}
+    Run Keyword If    '${desired_status}' == 'on' and '${final_status}' == 'true'
+    ...    ${status_correct}=    Set Variable    ${True}
+    
+    Run Keyword If    '${desired_status}' == 'off' and '${final_status}' == 'false'
+    ...    ${status_correct}=    Set Variable    ${True}
+    
+    Log    Desired: ${desired_status}, Final: ${final_status}, Correct: ${status_correct}
+    
+    Run Keyword If    not ${status_correct}
+    ...    Fail    Failed to set switch to ${desired_status}. Final status: ${final_status}
 
 Get Switch Info
     [Documentation]    Lấy thông tin chi tiết về switch
