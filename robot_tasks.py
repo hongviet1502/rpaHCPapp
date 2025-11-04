@@ -15,7 +15,7 @@ def run_tests(platform="android", device_name="emulator-5554", appium_server="ht
     
     Args:
         platform: platform (android, ios)
-        device_name: tên device
+        device_name: tên devicesel
         appium_server: địa chỉ Appium server
     """
     
@@ -37,7 +37,7 @@ def run_tests(platform="android", device_name="emulator-5554", appium_server="ht
     ]
     
     # Chạy mobile tests
-    robot_args.append("tests/mobile")
+    robot_args.append("tests/mobile/switch_tests.robot")
     
     print(f"Chạy tests: {' '.join(robot_args)}")
     

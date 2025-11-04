@@ -1,7 +1,9 @@
 *** Settings ***
 Documentation    Keywords điều khiển switch và button tắt/bật tất cả
 Library          AppiumLibrary
-
+Library          ../../resources/keywords/connect_to_mqtt.py
+Library          ../utils/helper_funtions.py
+Resource        ../variables/variables_switch.robot
 *** Keywords ***
 Get All Switch Button Status
     [Documentation]    Lấy trạng thái hiện tại của button tắt/bật tất cả
@@ -43,7 +45,7 @@ Click Turn Off All Button
     [Documentation]    Click button "Tắt tất cả"
     
     ${button_xpath}=    Set Variable    //android.view.ViewGroup[@content-desc="Tắt tất cả"]
-    Wait Until Page Contains Element    ${button_xpath}    10s
+    Page Should Contain Element    ${button_xpath}    10s
     Click Element    ${button_xpath}
     Sleep    3s
     Log    Clicked "Tắt tất cả" button
@@ -52,7 +54,7 @@ Click Turn On All Button
     [Documentation]    Click button "Bật tất cả"
     
     ${button_xpath}=    Set Variable    //android.view.ViewGroup[@content-desc="Bật tất cả"]
-    Wait Until Page Contains Element    ${button_xpath}    10s
+    Page Should Contain Element    ${button_xpath}    10s
     Click Element    ${button_xpath}
     Sleep    3s
     Log    Clicked "Bật tất cả" button
@@ -186,14 +188,33 @@ Advanced All Switch Test
 
 Test Control Single Button
     [Documentation]    Test từng nút của công tắc
+    [Arguments]    ${topic}    ${mac}    ${id}
+
     Wait Until Page Contains Element    ${UI_Button_1}    20
+    ${changed1}=    Run Keyword And Return Status    Check Color Changed    ${UI_Button_1}
     Click Element    ${UI_Button_1}
+    Run Keyword If    '${changed1}'=='True'    Log    Button 1 toggled successfully
+    Run Keyword If    '${changed1}'=='False'    Log    Button 1 toggled failed
+    Send Result To Mqtt     ${topic}    controlRL1    ${mac}    ${id}    ${changed1}    ${errorCode}
+    Log    Clicked button 1
     Sleep    5s
+
     Wait Until Page Contains Element    ${UI_Button_2}    20
+    ${changed2}=    Run Keyword And Return Status    Check Color Changed    ${UI_Button_2}
     Click Element    ${UI_Button_2}
+    Run Keyword If    '${changed2}'=='True'    Log    Button 2 toggled successfully
+    Run Keyword If    '${changed2}'=='False'    Log    Button 2 toggled failed
+    Send Result To Mqtt     ${topic}    controlRL2    ${mac}    ${id}    ${changed2}    ${errorCode}
+    Log    Clicked button 2
     Sleep    5s
+
     Wait Until Page Contains Element    ${UI_Button_3}    20
+    ${changed3}=    Run Keyword And Return Status    Check Color Changed    ${UI_Button_3}
     Click Element    ${UI_Button_3}
+    Run Keyword If    '${changed3}'=='True'    Log    Button 3 toggled successfully
+    Run Keyword If    '${changed3}'=='False'    Log    Button 3 toggled failed
+    Send Result To Mqtt     ${topic}    controlRL3    ${mac}    ${id}    ${changed3}    ${errorCode}
+    Log    Clicked button 3
     Sleep    5s
     # Wait Until Page Contains Element    ${UI_Button_4}    20
     # Click Element    ${UI_Button_4}
@@ -201,6 +222,6 @@ Test Control Single Button
 
 Click Button Go Back
     [Documentation]    Nhấn go back nếu test mọi thứ oke
-    Wait Until Page Contains Element    ${UI_Button_Back}    20
+    Page Should Contain Element    ${UI_Button_Back}    20
     Click Element    ${UI_Button_Back}
     Sleep    5s

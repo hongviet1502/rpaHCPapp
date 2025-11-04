@@ -139,7 +139,6 @@ Reset Scroll To Top
     FOR    ${attempt}    IN RANGE    ${max_scroll_attempts}
         # Scroll lên nhiều lần để đảm bảo về đầu
         Scroll Using Swipe Simple    up
-        Sleep    1s
     END
     
     Log    Scroll position reset to top
@@ -247,9 +246,9 @@ Smart Device Search For Continuous Testing
     
     Log    Starting smart device search for continuous testing: ${device_name}
     
-    # Bước 1: Đảm bảo đang ở đầu danh sách
-    Reset Scroll To Top
-    Sleep    2s
+    # # Bước 1: Đảm bảo đang ở đầu danh sách
+    # Reset Scroll To Top
+    # Sleep    2s
     
     # Bước 2: Tìm thiết bị với scroll 2 chiều
     ${found}=    Run Keyword And Return Status

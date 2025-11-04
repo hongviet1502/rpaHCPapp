@@ -21,7 +21,7 @@ Setup Test Case
 
 Cleanup Test Case
     [Documentation]    Dọn dẹp sau mỗi test case
-    Run Keyword If Test Failed    Capture Page Screenshot    ${TEST_NAME}_FAILED.png
+    # Run Keyword If Test Failed    Capture Page Screenshot    ${TEST_NAME}_FAILED.png
     Log    Completed test case: ${TEST_NAME}
 
 Wait For Element And Click Mobile

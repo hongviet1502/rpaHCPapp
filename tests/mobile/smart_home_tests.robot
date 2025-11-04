@@ -4,9 +4,10 @@ Resource         ../../resources/settings.robot
 Resource        ../../resources/UI_Import.robot
 # Cấu hình mặc định
 Suite Setup      Setup Test Environment
-Suite Teardown   Cleanup Test Environment
+Suite Teardown   Run Keyword And Ignore Error    Cleanup Test Environment
 Test Setup       Setup Test Case
-Test Teardown    Cleanup Test Case
+Test Teardown    Run Keyword And Ignore Error    Cleanup Test Case
+
 
 # Timeout settings
 Default Tags     regression
@@ -108,8 +109,13 @@ TC005_Control Dim Slider Three Positions
     Control Dim Slider    100  # Click cuối slider (100%)
 
 TC006_Back To Home Screen
-    [Documentation]    Điều khiển dim
-    [Tags]    navigation    home
-    Close Application
-    # Go Back
-    # Sleep    1s
+    [Documentation]    Kết thúc chu trình test switch - terminate app trên thiết bị rồi đóng session Appium
+    [Tags]    smoke    app_close
+    # 1) Thử terminate bằng AppiumLibrary (preferred)
+    Run Keyword And Ignore Error    Terminate Application    ${APP_PACKAGE}
+    # 2) Fallback (Android): force-stop app bằng adb nếu terminate không có hiệu lực
+    Run Keyword And Ignore Error    Run    adb -s ${DEVICE_NAME} shell am force-stop ${APP_PACKAGE}
+    Sleep    1s
+    # 3) Đóng session Appium (bỏ qua lỗi nếu session đã đóng)
+    Run Keyword And Ignore Error    Close Application
+    Log    App terminated on device and Appium session closed

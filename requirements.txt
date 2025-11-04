@@ -4,3 +4,5 @@ robotframework-datadriver==1.6.0
 appium-python-client>=5.1.1
 pytest==7.4.3
 allure-robotframework==2.13.2
+paho-mqtt
+pillow
